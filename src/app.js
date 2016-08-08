@@ -3,14 +3,14 @@ var Ajax = require('ajax');
 var stationKey = require('./lirr-stations.js');
 
 
-var card = new UI.Card({
+var loadingCard = new UI.Card({
   title:'Rebecca',
   subtitle:'Fetching times...'
 });
 
 var fetchTimes = function(){
   // Show Loading Screen
-  card.show();
+  loadingCard.show();
 
   // Construct URL
   var baseUrl='https://traintime.lirr.org/api/TrainTime?api_key=';
@@ -26,6 +26,8 @@ var fetchTimes = function(){
   var leaveHomeByTime = 7;
   URL += "&hour="+leaveHomeByTime;
   
+  console.log(URL);
+  
   // Make the request
   Ajax(
     {
@@ -34,28 +36,41 @@ var fetchTimes = function(){
     },
     function(data) {
       // Success!
-      card.title("");
-      card.subtitle("ISLIP -> PENN");
-      var legLength = data.TRIPS[0].LEGS.length;
-      var transfers = data.TRIPS[0].CONNECTIONS.length;
+      var timesCard = new UI.Card({
+        title: "Islip -> Penn",
+        scrollable: true
+      });
+     
+      // For each available train time, add to menu.
+      var returnMsg ="";
+      data.TRIPS.forEach(function(train){
+        var legLength = train.LEGS.length;
+        var transfers = train.CONNECTIONS.length;
+        returnMsg = "DEPARTS @" + train.LEGS[0].DEPART_TIME + "\n" +
+                  "ARRIVES @ " + train.LEGS[legLength-1].ARRIVE_TIME + "\n" +
+                  "DURATION :" + train.DURATION + "min\n" +
+                  "T: ";
+        // Add any transfers
+        if(transfers > 0){
+          train.CONNECTIONS.forEach(function(connection){
+            returnMsg += stationKey[connection.CONNECTING_STATION] + " ";
+          });
+        } else {
+          returnMsg += "N/A";
+        }
+        
+        console.log(returnMsg);
+        // Spacer
+        returnMsg += "\n --- \n";
+      });
+      // Display card
+      timesCard.body(returnMsg);
+      timesCard.show(); 
       
-      var returnMsg = "Dep: " + data.TRIPS[0].LEGS[0].DEPART_TIME + "\n" +
-                "Arr: " + data.TRIPS[0].LEGS[legLength-1].ARRIVE_TIME + "\n" +
-                "Dur: " + data.TRIPS[0].DURATION + "min";
-      
-      returnMsg += "\nT: ";
-      // If there are transfers, add
-      if(transfers > 0){
-        data.TRIPS[0].CONNECTIONS.forEach(function(connection){
-          returnMsg += stationKey[connection.CONNECTING_STATION] + " ";
-        });
-      } else {
-        returnMsg += "N/A";
-      }
-      card.body(returnMsg);
     },
     function(error) {
       // Failure!
+      loadingCard.body("Train fetch failed. Check phone's bluetooth / service.");
       console.log('Failed fetching weather data: ' + error);
     }
   );
