@@ -1,6 +1,7 @@
 var UI = require('ui');
 var Ajax = require('ajax');
-var Clock = require('clock');
+var stationKey = require('./lirr-stations.js');
+
 
 var card = new UI.Card({
   title:'Rebecca',
@@ -25,8 +26,6 @@ var fetchTimes = function(){
   var leaveHomeByTime = 7;
   URL += "&hour="+leaveHomeByTime;
   
-  console.log("URL:" + URL);
-  
   // Make the request
   Ajax(
     {
@@ -36,11 +35,24 @@ var fetchTimes = function(){
     function(data) {
       // Success!
       card.title("");
-      card.subtitle("ISLIP TO PENN");
+      card.subtitle("ISLIP -> PENN");
       var legLength = data.TRIPS[0].LEGS.length;
-      card.body("DEP: " + data.TRIPS[0].LEGS[0].DEPART_TIME + "\n" +
-                "ARR: " + data.TRIPS[0].LEGS[legLength-1].ARRIVE_TIME + "\n" +
-                "LEN: " + data.TRIPS[0].DURATION + "min\n");
+      var transfers = data.TRIPS[0].CONNECTIONS.length;
+      
+      var returnMsg = "Dep: " + data.TRIPS[0].LEGS[0].DEPART_TIME + "\n" +
+                "Arr: " + data.TRIPS[0].LEGS[legLength-1].ARRIVE_TIME + "\n" +
+                "Dur: " + data.TRIPS[0].DURATION + "min";
+      
+      returnMsg += "\nT: ";
+      // If there are transfers, add
+      if(transfers > 0){
+        data.TRIPS[0].CONNECTIONS.forEach(function(connection){
+          returnMsg += stationKey[connection.CONNECTING_STATION] + " ";
+        });
+      } else {
+        returnMsg += "N/A";
+      }
+      card.body(returnMsg);
     },
     function(error) {
       // Failure!
