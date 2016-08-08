@@ -34,9 +34,7 @@
     "sdkVersion": "3",
     "shortName": "Rebecca",
     "targetPlatforms": [
-        "aplite",
-        "basalt",
-        "chalk"
+        "basalt"
     ],
     "uuid": "2409c152-6173-4b0d-ad30-b8703c1e5f1b",
     "versionCode": 1,
