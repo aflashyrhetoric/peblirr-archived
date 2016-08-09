@@ -23,7 +23,7 @@ var fetchTimes = function(){
             '&startsta=' + startStation +
             '&endsta=' + endStation;
  
-  var leaveHomeByTime = 7;
+  var leaveHomeByTime = 6;
   URL += "&hour="+leaveHomeByTime;
   
   console.log(URL);
@@ -43,13 +43,16 @@ var fetchTimes = function(){
      
       // For each available train time, add to menu.
       var returnMsg ="";
+      var count = 1;
       data.TRIPS.forEach(function(train){
         var legLength = train.LEGS.length;
         var transfers = train.CONNECTIONS.length;
-        returnMsg = "DEPARTS @" + train.LEGS[0].DEPART_TIME + "\n" +
-                  "ARRIVES @ " + train.LEGS[legLength-1].ARRIVE_TIME + "\n" +
-                  "DURATION :" + train.DURATION + "min\n" +
-                  "T: ";
+        returnMsg += 
+                  "#"+count + "\n" +
+                  "DEP: " + train.LEGS[0].DEPART_TIME + "\n" +
+                  "ARR: " + train.LEGS[legLength-1].ARRIVE_TIME + "\n" +
+                  "DUR:" + train.DURATION + "min\n" +
+                  "Xfer: ";
         // Add any transfers
         if(transfers > 0){
           train.CONNECTIONS.forEach(function(connection){
@@ -58,10 +61,9 @@ var fetchTimes = function(){
         } else {
           returnMsg += "N/A";
         }
-        
-        console.log(returnMsg);
         // Spacer
         returnMsg += "\n --- \n";
+        count++;
       });
       // Display card
       timesCard.body(returnMsg);
