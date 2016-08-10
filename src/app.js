@@ -1,13 +1,34 @@
 var UI = require('ui');
-var Fetcher = require('./Fetcher.js');
+var Fetcher = require('./Fetcher');
+// var Clay = require('pebble-clay');
+// var clayConfig = require('./config');
+// var clay = new Clay(clayConfig);
+var Vector2 = require('vector2');
 
-// Loading
-var loadingCard = new UI.Card({
-  title:'Rebecca',
-  subtitle:'Fetching times...'
+var splashWindow = new UI.Window();
+
+// Text element to inform user
+var text = new UI.Text({
+  position: new Vector2(0, 0),
+  size: new Vector2(144, 168),
+  text:'Downloading data...',
+  font:'GOTHIC_28_BOLD',
+  color:'black',
+  textOverflow:'wrap',
+  textAlign:'center',
+  backgroundColor:'white'
 });
 
-// Show Loading Screen
-loadingCard.show();
+// Add to splashWindow and show
+splashWindow.add(text);
+splashWindow.show();
 
-Fetcher.fetchTimes(loadingCard);
+// Loading
+// var loadingCard = new UI.Card({
+//   title:'Rebecca',
+//   subtitle:'Fetching times...'
+// });
+
+// Show Loading Screen
+// loadingCard.show();
+Fetcher.fetchTimes();
