@@ -1,24 +1,56 @@
 /* global module */
+// START IMPORTS
 var UI = require('ui');
 var Ajax = require('ajax');
 var stationKey = require('./lirr-stations.js');
-// var Vector2 = require('vector2');
-// var splashWindow = UI.Window();
+var Clay = require('./clay');
+var clayConfig = require('./config');
+var Vector2 = require('vector2');
+// END OF IMPORTS
 
-var fetchTimes = function(splashWindow){
+// START INITIALIZATIONS
+var clay = new Clay(clayConfig);
+var splashWindow = new UI.Window();
+var dict;
+// END OF INITIALIZATIONS
+
+// Display error page if settings aren't set.
+var displaySettingsNotSet = function(){
+  
+  // Text element to inform user
+  var text = new UI.Text({
+    position: new Vector2(0, 0),
+    size: new Vector2(144, 168),
+    text:'Please double-check phone settings.',
+    font:'GOTHIC_28_BOLD',
+    color:'black',
+    textOverflow:'wrap',
+    textAlign:'center',
+    backgroundColor:'white'
+  });
+  
+  // Add to splashWindow and show
+  splashWindow.add(text);
+  splashWindow.show();
+};
+
+var fetchTimes = function(splashWindow, dict){
   
   // Construct URL
   var baseUrl='https://traintime.lirr.org/api/TrainTime?api_key=';
   var apiKey='071b22082ed67d6d6df78a3a98c41e62';
   
   // Hard-coded STATION values
-  var startStation='ISP';
-  var endStation='NYK';
+//   var startStation='ISP';
+  var startStation=dict.mk_home_station;
+//   var endStation='NYK';
+  var endStation=dict.mk_work_station;
   var URL = baseUrl + 
             apiKey + 
             '&startsta=' + startStation +
             '&endsta=' + endStation;
-  var leaveHomeByTime = 6;
+//   var leaveHomeByTime = 6;
+  var leaveHomeByTime = dict.mk_arrive_by_time;
   URL += "&hour="+leaveHomeByTime;
   
   var convertToTime = function(time){

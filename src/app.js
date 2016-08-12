@@ -1,11 +1,11 @@
 var UI = require('ui');
 var Fetcher = require('./Fetcher');
-var Clay = require('./clay');
-var clayConfig = require('./config');
-var clay = new Clay(clayConfig);
 var Vector2 = require('vector2');
-
 var splashWindow = new UI.Window();
+var Clay = require('./clay');
+var config = require('./config.js');
+var clay = new Clay(config);
+var dict;
 
 // Text element to inform user
 var text = new UI.Text({
@@ -32,4 +32,32 @@ splashWindow.show();
 // Show Loading Screen
 // loadingCard.show();
 // Fetcher.initialSetup(splashWindow);
-Fetcher.fetchTimes(splashWindow);
+
+Pebble.addEventListener('showConfiguration', function(e) {
+//     var platform = clay.meta.activeWatchInfo.platform || 'basalt';
+    clay.config = config;
+
+    Pebble.openURL(clay.generateUrl());
+});
+
+// SETTINGS STUFF
+Pebble.addEventListener('webviewclosed', function(e) {
+    if (e && !e.response) {
+        return;
+    }
+
+    // Get the keys and values from each config item
+    dict = clay.getSettings(e.response);
+
+    // Send settings values to watch side
+    Pebble.sendAppMessage(dict, function(e) {
+        console.log('Sent config data to Pebble');
+    }, function(e) {
+        console.log('Failed to send config data!');
+        console.log(JSON.stringify(e));
+    });
+});
+
+console.log(dict);
+console.log(typeof dict);
+Fetcher.fetchTimes(splashWindow, dict);

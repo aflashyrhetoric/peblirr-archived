@@ -20,15 +20,15 @@ module.exports = [
         "type": "select",
         "label": "Set home station.",
         "messageKey": "mk_home_station",
-        "id": "home_station",
+        "id": "id_home_station",
         "defaultValue": "Penn Station",
         "options": stationOptions
       },
       {
         "type": "select",
         "label": "Set work station.",
-        "messageKey": "mk_workstation",
-        "id": "work_station",
+        "messageKey": "mk_work_station",
+        "id": "id_work_station",
         "defaultValue": "Penn Station",
         "options": stationOptions
       }
@@ -48,7 +48,6 @@ module.exports = [
         "label": "Arrive To Work Station By (1-24)",
         "defaultValue": "9",
         "attributes": {
-          "type": "time",
           "placeholder": "9"
         }
       },
@@ -59,10 +58,13 @@ module.exports = [
         "label": "Depart For Home Station By (1-24)",
         "defaultValue": "17",
         "attributes": {
-          "type": "time",
           "placeholder": "17"
         }
       }
     ]
+  },
+  {
+    "type": "submit",
+    "defaultValue": "Save Settings"
   }
 ];
