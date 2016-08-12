@@ -19,7 +19,7 @@ module.exports = [
       {
         "type": "select",
         "label": "Set home station.",
-        "messageKey": "mk_home_station",
+        "messageKey": "home_station",
         "id": "id_home_station",
         "defaultValue": "Penn Station",
         "options": stationOptions
@@ -27,7 +27,7 @@ module.exports = [
       {
         "type": "select",
         "label": "Set work station.",
-        "messageKey": "mk_work_station",
+        "messageKey": "work_station",
         "id": "id_work_station",
         "defaultValue": "Penn Station",
         "options": stationOptions
@@ -44,7 +44,7 @@ module.exports = [
       {
         "type": "input",
         "id": "arrive_by_time",
-        "messageKey": "mk_arrive_by_time",
+        "messageKey": "arrive_by_time",
         "label": "Arrive To Work Station By (1-24)",
         "defaultValue": "9",
         "attributes": {
@@ -54,7 +54,7 @@ module.exports = [
       {
         "type": "input",
         "id": "depart_by_time",
-        "messageKey": "mk_depart_by_time",
+        "messageKey": "depart_by_time",
         "label": "Depart For Home Station By (1-24)",
         "defaultValue": "17",
         "attributes": {

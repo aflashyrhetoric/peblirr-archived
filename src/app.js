@@ -5,7 +5,6 @@ var splashWindow = new UI.Window();
 var Clay = require('./clay');
 var config = require('./config.js');
 var clay = new Clay(config);
-var dict;
 
 // Text element to inform user
 var text = new UI.Text({
@@ -41,23 +40,7 @@ Pebble.addEventListener('showConfiguration', function(e) {
 });
 
 // SETTINGS STUFF
-Pebble.addEventListener('webviewclosed', function(e) {
-    if (e && !e.response) {
-        return;
-    }
 
-    // Get the keys and values from each config item
-    dict = clay.getSettings(e.response);
 
-    // Send settings values to watch side
-    Pebble.sendAppMessage(dict, function(e) {
-        console.log('Sent config data to Pebble');
-    }, function(e) {
-        console.log('Failed to send config data!');
-        console.log(JSON.stringify(e));
-    });
-});
-
-console.log(dict);
-console.log(typeof dict);
-Fetcher.fetchTimes(splashWindow, dict);
+console.log("About to call fetchtimes.");
+Fetcher.fetchTimes(splashWindow);
