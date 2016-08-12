@@ -4,9 +4,9 @@ var Ajax = require('ajax');
 var stationKey = require('./lirr-stations.js');
 // var Vector2 = require('vector2');
 // var splashWindow = UI.Window();
-    
-var fetchTimes = function(){
 
+var fetchTimes = function(splashWindow){
+  
   // Construct URL
   var baseUrl='https://traintime.lirr.org/api/TrainTime?api_key=';
   var apiKey='071b22082ed67d6d6df78a3a98c41e62';
@@ -71,6 +71,7 @@ var fetchTimes = function(){
         }]
       });
       trainTimesList.show();
+      splashWindow.hide();
     },
     function(error) {
       var card = new UI.Card();

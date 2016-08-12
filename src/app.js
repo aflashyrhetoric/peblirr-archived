@@ -1,8 +1,8 @@
 var UI = require('ui');
 var Fetcher = require('./Fetcher');
-// var Clay = require('pebble-clay');
-// var clayConfig = require('./config');
-// var clay = new Clay(clayConfig);
+var Clay = require('./clay');
+var clayConfig = require('./config');
+var clay = new Clay(clayConfig);
 var Vector2 = require('vector2');
 
 var splashWindow = new UI.Window();
@@ -31,4 +31,5 @@ splashWindow.show();
 
 // Show Loading Screen
 // loadingCard.show();
-Fetcher.fetchTimes();
+// Fetcher.initialSetup(splashWindow);
+Fetcher.fetchTimes(splashWindow);
